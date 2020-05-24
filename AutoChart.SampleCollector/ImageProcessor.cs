@@ -27,10 +27,10 @@ namespace AutoChart.SampleCollector
 
         List<int> sampleColumns = new List<int>
         {
-            (redLeft + redRight) / 2,
-            (yellowLeft + yellowRight) / 2,
-            (blueLeft + blueRight) / 2,
-            (greenLeft + greenRight) / 2,
+            redRight,
+            yellowLeft,
+            blueRight,
+            greenLeft
         };
 
         List<string> sampleNames = new List<string>
