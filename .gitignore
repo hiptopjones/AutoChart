@@ -1,6 +1,21 @@
 
 .vs
 packages
-AutoChart/bin
-AutoChart/obj
-AutoChart/AutoChart.csproj.user
+AutoChart.Common/bin
+AutoChart.Common/obj
+AutoChart.Common/AutoChart.Common.csproj.user
+AutoChart.FrameExtractor/bin
+AutoChart.FrameExtractor/obj
+AutoChart.FrameExtractor/AutoChart.FrameExtractor.csproj.user
+AutoChart.FeatureDetector/bin
+AutoChart.FeatureDetector/obj
+AutoChart.FeatureDetector/AutoChart.FeatureDetector.csproj.user
+AutoChart.ImageCorrector/bin
+AutoChart.ImageCorrector/obj
+AutoChart.ImageCorrector/AutoChart.ImageCorrector.csproj.user
+AutoChart.SampleCollector/bin
+AutoChart.SampleCollector/obj
+AutoChart.SampleCollector/AutoChart.SampleCollector.csproj.user
+AutoChart.SampleVisualizer/bin
+AutoChart.SampleVisualizer/obj
+AutoChart.SampleVisualizer/AutoChart.SampleVisualizer.csproj.user

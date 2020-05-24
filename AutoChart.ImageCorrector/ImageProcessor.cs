@@ -1,4 +1,5 @@
 ﻿using ImageMagick;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,15 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoChart
+namespace AutoChart.ImageCorrector
 {
-    class ImageCorrector
+    class ImageProcessor
     {
-        public void CorrectStillsPerspectiveAndCrop(string[] args)
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
+        public void CorrectStillsPerspectiveAndCrop(CommandLineOptions options)
         {
-            // CorrectStillsPerspectiveAndCrop "C:\Users\hipto\Desktop\NewKidInSchool\frames" "C:\Users\hipto\Desktop\NewKidInSchool\corrected"
-            string inputDirectoryPath = args[0];
-            string outputDirectoryPath = args[1];
+            string inputDirectoryPath = options.InputDirectoryPath;
+            string outputDirectoryPath = options.OutputDirectoryPath;
+            int skipFrameCount = options.SkipFramesCount;
+            int takeFrameCount = options.TakeFramesCount;
 
             if (!Directory.Exists(outputDirectoryPath))
             {
@@ -25,7 +29,23 @@ namespace AutoChart
             string[] inputFilePaths = Directory.GetFiles(inputDirectoryPath);
             foreach (string inputFilePath in inputFilePaths)
             {
-                Console.WriteLine($"Processing '{inputFilePath}'");
+                // Allow subsetting the input frames
+                if (skipFrameCount > 0)
+                {
+                    skipFrameCount--;
+                    continue;
+                }
+
+                if (takeFrameCount > 0)
+                {
+                    takeFrameCount--;
+                }
+                else
+                {
+                    break;
+                }
+
+                Logger.Info($"Processing '{inputFilePath}'");
 
                 string inputFileName = Path.GetFileName(inputFilePath);
                 string inputFileExtension = Path.GetExtension(inputFileName);

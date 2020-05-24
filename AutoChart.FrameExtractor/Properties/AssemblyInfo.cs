@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AutoChart")]
+[assembly: AssemblyTitle("AutoChart.FrameExtractor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AutoChart")]
+[assembly: AssemblyProduct("AutoChart.FrameExtractor")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3a1c704c-7817-419e-91e2-340f58b24312")]
+[assembly: Guid("25b7b0eb-c778-4979-be1c-ea55c2cdd52e")]
 
 // Version information for an assembly consists of the following four values:
 //
