@@ -46,14 +46,7 @@ namespace AutoChart.TimelineBuilder
 
             FeatureDetector featureDetector = new FeatureDetector();
 
-            // Timeline for each lane in notes (based on divisions per beat, assuming constant 4/4 time)
-            Dictionary<string, List<bool>> NoteTimeline = new Dictionary<string, List<bool>>();
-            foreach (string columnName in ColumnNames)
-            {
-                NoteTimeline[columnName] = new List<bool>();
-            }
-            NoteTimeline["Kick"] = new List<bool>();
-
+            List<Dictionary<string, bool>> songTimeline = new List<Dictionary<string, bool>>();
 
             int nextNoteLocation = 0;
             bool isSynchronized = false;
@@ -118,6 +111,9 @@ namespace AutoChart.TimelineBuilder
 
                     while (nextNoteLocation > upperLocationCutoff)
                     {
+                        Dictionary<string, bool> beatDivision = new Dictionary<string, bool>();
+                        songTimeline.Add(beatDivision);
+
                         int totalNoteLocation = 0;
 
                         bool isKickNote = false;
@@ -125,17 +121,17 @@ namespace AutoChart.TimelineBuilder
                         {
                             Feature feature = columnFeatures[columnName].LastOrDefault(x => Math.Abs(x.EffectiveLocation - nextNoteLocation) < featureLocationTolerance);
 
-                            NoteTimeline[columnName].Add(feature != null && feature.FeatureType == FeatureType.StickNote);
+                            beatDivision[columnName] = (feature != null && feature.FeatureType == FeatureType.StickNote);
                             isKickNote |= (feature != null && feature.FeatureType == FeatureType.KickNote);
 
                             totalNoteLocation += (feature != null ? feature.EffectiveLocation : nextNoteLocation);
                         }
 
-                        NoteTimeline["Kick"].Add(isKickNote);
+                        beatDivision["Kick"] = isKickNote;
 
                         // Account for drift and cumulative error by following actual locations where possible
                         int actualNoteLocation = totalNoteLocation / (ColumnNames.Count);
-                        Console.WriteLine($"{Path.GetFileName(inputFilePath)} @ {nextNoteLocation} / {actualNoteLocation}: {NoteTimeline["Red"].Last():10} {NoteTimeline["Yellow"].Last():10} {NoteTimeline["Blue"].Last():10} {NoteTimeline["Green"].Last():10} {NoteTimeline["Kick"].Last():10}");
+                        Console.WriteLine($"{Path.GetFileName(inputFilePath)} @ {nextNoteLocation} / {actualNoteLocation}: {beatDivision["Red"]:10} {beatDivision["Yellow"]:10} {beatDivision["Blue"]:10} {beatDivision["Green"]:10} {beatDivision["Kick"]:10}");
 
                         nextNoteLocation = actualNoteLocation;
                         nextNoteLocation -= (beatIntervalInPixels / divisionsPerBeat);
@@ -143,7 +139,7 @@ namespace AutoChart.TimelineBuilder
                 }
             }
 
-            string jsonText = JsonConvert.SerializeObject(NoteTimeline, Formatting.Indented, StringEnumConverter);
+            string jsonText = JsonConvert.SerializeObject(songTimeline, Formatting.Indented, StringEnumConverter);
             File.WriteAllText(outputFilePath, jsonText);
         }
     }
