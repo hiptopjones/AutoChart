@@ -22,3 +22,9 @@ AutoChart.SampleVisualizer/AutoChart.SampleVisualizer.csproj.user
 AutoChart.TimelineBuilder/bin
 AutoChart.TimelineBuilder/obj
 AutoChart.TimelineBuilder/AutoChart.TimelineBuilder.csproj.user
+AutoChart.AudioExtractor/bin
+AutoChart.AudioExtractor/obj
+AutoChart.AudioExtractor/AutoChart.AudioExtractor.csproj.user
+AutoChart.ChartWriter/bin
+AutoChart.ChartWriter/obj
+AutoChart.ChartWriter/AutoChart.ChartWriter.csproj.user

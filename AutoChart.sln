@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoChart.SampleVisualizer"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoChart.TimelineBuilder", "AutoChart.TimelineBuilder\AutoChart.TimelineBuilder.csproj", "{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoChart.ChartWriter", "AutoChart.ChartWriter\AutoChart.ChartWriter.csproj", "{25624F51-228D-47AD-9676-66085D26B964}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoChart.AudioExtractor", "AutoChart.AudioExtractor\AutoChart.AudioExtractor.csproj", "{8F0D78FE-AB3D-43A4-AB03-5884FD8E0CEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25624F51-228D-47AD-9676-66085D26B964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25624F51-228D-47AD-9676-66085D26B964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25624F51-228D-47AD-9676-66085D26B964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25624F51-228D-47AD-9676-66085D26B964}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F0D78FE-AB3D-43A4-AB03-5884FD8E0CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F0D78FE-AB3D-43A4-AB03-5884FD8E0CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F0D78FE-AB3D-43A4-AB03-5884FD8E0CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F0D78FE-AB3D-43A4-AB03-5884FD8E0CEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

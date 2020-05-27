@@ -26,6 +26,7 @@ namespace AutoChart.FrameExtractor
                 Directory.CreateDirectory(outputDirectoryPath);
             }
 
+            Logger.Info($"Processing '{inputFilePath}'");
             using (Engine engine = new Engine())
             {
                 MediaFile inputMediaFile = new MediaFile { Filename = inputFilePath };
