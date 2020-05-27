@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoChart.FeatureDetector",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoChart.SampleVisualizer", "AutoChart.SampleVisualizer\AutoChart.SampleVisualizer.csproj", "{7E669F1B-5088-4907-98CE-B2512EDF4A79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoChart.TimelineBuilder", "AutoChart.TimelineBuilder\AutoChart.TimelineBuilder.csproj", "{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{7E669F1B-5088-4907-98CE-B2512EDF4A79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E669F1B-5088-4907-98CE-B2512EDF4A79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E669F1B-5088-4907-98CE-B2512EDF4A79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,3 +19,6 @@ AutoChart.SampleCollector/AutoChart.SampleCollector.csproj.user
 AutoChart.SampleVisualizer/bin
 AutoChart.SampleVisualizer/obj
 AutoChart.SampleVisualizer/AutoChart.SampleVisualizer.csproj.user
+AutoChart.TimelineBuilder/bin
+AutoChart.TimelineBuilder/obj
+AutoChart.TimelineBuilder/AutoChart.TimelineBuilder.csproj.user

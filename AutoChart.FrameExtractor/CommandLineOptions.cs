@@ -45,11 +45,19 @@ namespace AutoChart.FrameExtractor
                 if (string.IsNullOrEmpty(InputFilePath))
                 {
                     Logger.Error("InputDirectoryPath must be specified");
+                    return false;
                 }
 
                 if (string.IsNullOrEmpty(OutputDirectoryPath))
                 {
                     Logger.Error("OutputDirectoryPath must be specified");
+                    return false;
+                }
+
+                if (FrameIntervalInSeconds == 0)
+                {
+                    Logger.Error("FrameIntervalInSeconds must be specified and non-zero");
+                    return false;
                 }
 
                 Logger.Info($"Application configuration:");

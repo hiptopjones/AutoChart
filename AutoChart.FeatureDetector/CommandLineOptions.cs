@@ -12,6 +12,7 @@ namespace AutoChart.FeatureDetector
         public string OutputDirectoryPath { get; private set; }
         public int SkipFramesCount { get; set; } = 0;
         public int TakeFramesCount { get; set; } = Int32.MaxValue;
+        public string ReferenceFeaturesFilePath { get; private set; }
 
         public bool ParseArguments(string[] args)
         {
@@ -35,6 +36,10 @@ namespace AutoChart.FeatureDetector
 
                         case "--TakeFramesCount":
                             TakeFramesCount = Convert.ToInt32(args[++i]);
+                            break;
+
+                        case "--ReferenceFeaturesFilePath":
+                            ReferenceFeaturesFilePath = args[++i];
                             break;
 
                         case "--PromptUser":
@@ -62,6 +67,7 @@ namespace AutoChart.FeatureDetector
                 Logger.Info($"  OutputDirectoryPath:            '{OutputDirectoryPath}'");
                 Logger.Info($"  SkipFramesCount:                {SkipFramesCount}");
                 Logger.Info($"  TakeFramesCount:                {TakeFramesCount}");
+                Logger.Info($"  ReferenceFeaturesFilePath:      '{ReferenceFeaturesFilePath}'");
                 Logger.Info($"  PromptUser:                     {PromptUser}");
             }
             catch (Exception ex)
