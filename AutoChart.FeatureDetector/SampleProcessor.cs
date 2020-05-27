@@ -1,6 +1,7 @@
 ﻿using AutoChart.Common;
 using CsvHelper;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace AutoChart.FeatureDetector
 
         // To treat the group of samples as a feature, at least one of them must be this tall
         private int FeatureMaxGrayThreshold { get; set; } = 50;
+
+        private StringEnumConverter StringEnumConverter { get; set; } = new StringEnumConverter();
 
         public void DetectFeaturesInSamples(CommandLineOptions options)
         {
@@ -74,25 +77,27 @@ namespace AutoChart.FeatureDetector
                     foreach (string columnName in ColumnNames)
                     {
                         List<Sample> columnSamples = samples.Where(x => x.Column == columnName).ToList();
+
                         List<Feature> detectedFeatures = DetectFeatures(columnSamples);
                         List<Feature> filteredFeatures = new List<Feature>();
                         List<Feature> removedFeatures = new List<Feature>();
 
                         foreach (Feature detectedFeature in detectedFeatures)
                         {
-                            int rowCutoff = 30;
+                            int topSampleCutoff = 80;
+                            int bottomSampleCutoff = 20;
 
-                            Logger.Info($"{columnName}, {detectedFeature.FeatureLocation} {detectedFeature.FeatureType} - #: {detectedFeature.Samples.Count}; max: {detectedFeature.Samples.Max(x => x.Gray)} [{detectedFeature.Samples.First().Row} - {detectedFeature.Samples.Last().Row}]");
+                            //Logger.Info($"{columnName}, {detectedFeature.EffectiveRow} {detectedFeature.FeatureType} - #: {detectedFeature.Samples.Count}; max: {detectedFeature.Samples.Max(x => x.Gray)} [{detectedFeature.Samples.First().Row} - {detectedFeature.Samples.Last().Row}]");
 
-                            // Ignore features near the edges of the frame, since they can be distorted and unreliable
-                            if (detectedFeature.FeatureLocation < rowCutoff || detectedFeature.FeatureLocation > (columnSamples.Last().Row - rowCutoff))
+                            // Ignore features toward the edges of the frame, since they can be distorted, cut-off and unreliable
+                            if (detectedFeature.EffectiveLocation < topSampleCutoff || detectedFeature.EffectiveLocation > (columnSamples.Last().Row - bottomSampleCutoff))
                             {
-                                Logger.Info("Ignoring feature near the edges");
+                                //Logger.Info("Ignoring feature near the edges");
                                 removedFeatures.Add(detectedFeature);
                             }
-                            else if (detectedFeature.FeatureType == "Unknown")
+                            else if (detectedFeature.FeatureType == FeatureType.Unknown)
                             {
-                                Logger.Info("Ignoring feature that could not be identified");
+                                //Logger.Info("Ignoring feature that could not be identified");
                                 removedFeatures.Add(detectedFeature);
                             }
                             else
@@ -105,12 +110,10 @@ namespace AutoChart.FeatureDetector
                     }
 
                     string inputFileName = Path.GetFileName(inputFilePath);
-                    string inputFileExtension = Path.GetExtension(inputFileName);
-
                     string outputFileName = inputFileName.Substring(0, inputFileName.IndexOf('.')) + ".features.json";
                     string outputFilePath = Path.Combine(outputDirectoryPath, outputFileName);
 
-                    string jsonText = JsonConvert.SerializeObject(features, Formatting.Indented);
+                    string jsonText = JsonConvert.SerializeObject(features, Formatting.Indented, StringEnumConverter);
                     File.WriteAllText(outputFilePath, jsonText);
                 }
             }
@@ -178,11 +181,11 @@ namespace AutoChart.FeatureDetector
                 // TODO: Make these thresholds configurable on the command-line
                 if (featureSampleCount < 5)
                 {
-                    columnFeature.FeatureType = "HalfBeat";
+                    columnFeature.FeatureType = FeatureType.OffBeat;
                 }
                 else if (featureSampleCount < 10)
                 {
-                    columnFeature.FeatureType = "FullBeat";
+                    columnFeature.FeatureType = FeatureType.FullBeat;
                 }
                 else if (featureSampleCount < 20)
                 {
@@ -190,43 +193,47 @@ namespace AutoChart.FeatureDetector
                     // Use the max value to help adjust classification
                     if (featureMaxValue > 100)
                     {
-                        columnFeature.FeatureType = "KickNote";
+                        columnFeature.FeatureType = FeatureType.KickNote;
                     }
                     else
                     {
-                        columnFeature.FeatureType = "FullBeat";
-                    }
-                }
-                else if (featureSampleCount < 40)
-                {
-                    // Some features are wider than they should be, due to noise in the background
-                    // Use the max value to help adjust classification
-                    if (featureMaxValue > 100)
-                    {
-                        columnFeature.FeatureType = "HandNote";
-                    }
-                    else
-                    {
-                        columnFeature.FeatureType = "Unknown";
-                        Logger.Warn("Looks like a hand note, but does not meet the max value threshold");
+                        columnFeature.FeatureType = FeatureType.FullBeat;
                     }
                 }
                 else
                 {
-                    columnFeature.FeatureType = "Unknown";
-                    Logger.Warn("Large sample count in the feature suggests notes are probably lumped together");
+                    columnFeature.FeatureType = FeatureType.StickNote;
                 }
             }
         }
 
         private void LocateFeatures(List<Feature> columnFeatures)
         {
-            // Calculate the effective location of the feature
-            // Based on a simple "center of mass" calculation
-            // NOTE: Could account for the locaiton of the value peak, but not doing that now
+            // Determine the effective location of the feature
             foreach (Feature columnFeature in columnFeatures)
             {
-                columnFeature.FeatureLocation = (int)Math.Round(columnFeature.Samples.Average(x => x.Row), 0);
+                switch (columnFeature.FeatureType)
+                {
+                    // The effective location of these items is basically the maximum brightness point
+                    case FeatureType.OffBeat:
+                    case FeatureType.FullBeat:
+                    case FeatureType.KickNote:
+                        columnFeature.EffectiveLocation = columnFeature.Samples.First(x => x.Gray == columnFeature.Samples.Max(y => y.Gray)).Row;
+                        break;
+
+                    // The effective location of a stick note is near the bottom of the sprite
+                    case FeatureType.StickNote:
+                        columnFeature.EffectiveLocation = columnFeature.Samples.Skip(columnFeature.Samples.Count - 7).First().Row;
+                        break;
+
+                    // The effective location of unknown items is the physical center of the feature
+                    case FeatureType.Unknown:
+                        columnFeature.EffectiveLocation = (int)Math.Round(columnFeature.Samples.Average(x => x.Row), 0);
+                        break;
+
+                    default:
+                        throw new Exception($"Unexpected feature type: {columnFeature.FeatureType}");
+                }
             }
         }
     }
