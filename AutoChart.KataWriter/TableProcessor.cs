@@ -1,6 +1,5 @@
 ﻿using AutoChart.Common;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using CsvHelper;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -10,38 +9,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoChart.ChartWriter
+namespace AutoChart.KataWriter
 {
-    class TimelineProcessor
+    class TableProcessor
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        // TODO: Move to a shared enum
-        private List<string> ColumnNames { get; } = new List<string>
-        {
-            "Kick",
-            "Red",
-            "Yellow",
-            "Blue",
-            "Green"
-        };
-
-        private StringEnumConverter StringEnumConverter { get; set; } = new StringEnumConverter();
-
-        public void GenerateChart(CommandLineOptions options)
+        public void GenerateKataChart(CommandLineOptions options)
         {
             string inputFilePath = options.InputFilePath;
             string outputFilePath = options.OutputFilePath;
 
             Logger.Info($"Processing '{inputFilePath}'");
 
-            string jsonTimeline = File.ReadAllText(inputFilePath);
-            List<Dictionary<string, bool>> songTimeline = JsonConvert.DeserializeObject<List<Dictionary<string, bool>>>(jsonTimeline);
+            List<dynamic> timelineEntries;
+            using (StreamReader reader = new StreamReader(inputFilePath))
+            using (CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                timelineEntries = csv.GetRecords<dynamic>().ToList();
+            }
 
+            // TODO: These should be command-line parameters
             int beatsPerMinute = 139;
             int timelineDivisionsPerBeat = 4;
             int chartDivisionsPerBeat = 192;
             int chartStartingDivisionIndex = 768;
+            string songName = "newkidinschool.mp3";
 
             ChartFormat chart = new ChartFormat();
 
@@ -54,26 +47,27 @@ namespace AutoChart.ChartWriter
             chart.Song.Add(new KeyValuePair<string, string>("PreviewEnd", "0"));
             chart.Song.Add(new KeyValuePair<string, string>("Genre", Quote("rock")));
             chart.Song.Add(new KeyValuePair<string, string>("MediaType", Quote("cd")));
-            chart.Song.Add(new KeyValuePair<string, string>("MusicStream", Quote("newkidinschool.mp3")));
+            chart.Song.Add(new KeyValuePair<string, string>("MusicStream", Quote(songName)));
 
             chart.SyncTrack.Add(new KeyValuePair<string, string>("0", "TS 4"));
             chart.SyncTrack.Add(new KeyValuePair<string, string>("0", $"B {beatsPerMinute * 1000}"));
 
             int timelineDivisionIndex = 0;
 
-            foreach (Dictionary<string, bool> beatDivision in songTimeline)
+            foreach (dynamic timelineEntry in timelineEntries)
             {
-                int chartDivisionIndex = (int)(chartStartingDivisionIndex + (timelineDivisionIndex / (double) timelineDivisionsPerBeat) * chartDivisionsPerBeat);
+                int chartDivisionIndex = (int)(chartStartingDivisionIndex + (timelineDivisionIndex / (double)timelineDivisionsPerBeat) * chartDivisionsPerBeat);
 
-                for (int i = 0; i < ColumnNames.Count; i++)
+                foreach (string columnName in Enum.GetNames(typeof(DrumType)))
                 {
-                    string columnName = ColumnNames[i];
-
-                    bool isNotePresent = beatDivision[columnName];
-                    if (isNotePresent)
+                    object timelineEntryValue;
+                    if ((timelineEntry as IDictionary<string, object>).TryGetValue(columnName, out timelineEntryValue))
                     {
-                        int noteIndex = GetNoteIndexFromColumnNameIndex(i);
-                        chart.ExpertDrums.Add(new KeyValuePair<string, string>(Convert.ToString(chartDivisionIndex), $"N {noteIndex} 0"));
+                        if ((string)timelineEntryValue == "X")
+                        {
+                            int midiNoteIndex = GetMidiNoteFromColumnName(columnName);
+                            chart.ExpertDrums.Add(new KeyValuePair<string, string>(Convert.ToString(chartDivisionIndex), $"N {midiNoteIndex} 0"));
+                        }
                     }
                 }
 
@@ -119,14 +113,10 @@ namespace AutoChart.ChartWriter
             File.WriteAllText(outputFilePath, chartText);
         }
 
-        private int GetNoteIndexFromColumnNameIndex(int i)
+        private int GetMidiNoteFromColumnName(string columnName)
         {
-            if (i == 4)
-            {
-                return 5;
-            }
-
-            return i;
+            DrumType drumType = (DrumType)Enum.Parse(typeof(DrumType), columnName);
+            return (int)drumType;
         }
 
         private string Quote(string text)

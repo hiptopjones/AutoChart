@@ -28,3 +28,12 @@ AutoChart.AudioExtractor/AutoChart.AudioExtractor.csproj.user
 AutoChart.ChartWriter/bin
 AutoChart.ChartWriter/obj
 AutoChart.ChartWriter/AutoChart.ChartWriter.csproj.user
+AutoChart.RhythmRecorder/bin
+AutoChart.RhythmRecorder/obj
+AutoChart.RhythmRecorder/AutoChart.RhythmRecorder.csproj.user
+AutoChart.TableWriter/bin
+AutoChart.TableWriter/obj
+AutoChart.TableWriter/AutoChart.TableWriter.csproj.user
+AutoChart.KataWriter/bin
+AutoChart.KataWriter/obj
+AutoChart.KataWriter/AutoChart.KataWriter.csproj.user

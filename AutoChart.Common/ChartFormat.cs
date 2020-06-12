@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoChart.ChartWriter
+namespace AutoChart.Common
 {
-    class Chart
+    public class ChartFormat
     {
         public List<KeyValuePair<string, string>> Song { get; set; } = new List<KeyValuePair<string, string>>();
         public List<KeyValuePair<string, string>> SyncTrack { get; set; } = new List<KeyValuePair<string, string>>();
