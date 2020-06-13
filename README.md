@@ -91,6 +91,6 @@ A sketchy way to capture a song's audio from youtube, is to navigate to the vide
 ## Limitations
 This is a work in progress, so there are lots of warts and weak spots, including:
 
-* Requires that a song has a single and consistent BPM.  If the drummer wasn't playing to a "click track" (meaning the BPM shifts over the course of the song) or if there are deliberate BPM changes in the song, this pipeline may not work properly.
-* Tested with Rock Band 2's practice mode on an Xbox 360.  I have not yet tried it with other versions, so I don't know whether it will work.
+* Requires that a song has a single and consistent BPM.  If the drummer wasn't playing to a "click track" (meaning the BPM shifts over the course of the song) or if there are deliberate BPM or time signature changes in the song, this pipeline may not work properly.
+* Tested with Rock Band 2's practice mode on an Xbox 360.  I have not yet tried it with other versions of Rock Band or on other consoles, so I don't know whether it will work.
 * Not all settings are exposed as command-line arguments yet.  In the spirit of trying to get this working, some things ended up hardcoded. That will change over time, but may limit the ability to use this pipeline for other songs.
