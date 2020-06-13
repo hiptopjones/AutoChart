@@ -48,7 +48,7 @@ Run TimelineBuilder.exe to generate a timeline for the song that contains all de
 Example command-line:
 
 ```
---InputDirectoryPath "NewKidInSchool\samples" --OutputFilePath "NewKidInSchool\timeline.json" --BeatIntervalInPixels 130 --FrameIntervalInSeconds 0.2 --BeatsPerMinute 139 --DivisionsPerBeat 4
+TimelineBuilder.exe --InputDirectoryPath "NewKidInSchool\samples" --OutputFilePath "NewKidInSchool\timeline.json" --BeatIntervalInPixels 130 --FrameIntervalInSeconds 0.2 --BeatsPerMinute 139 --DivisionsPerBeat 4
 ```
 
 ## Table Creation
@@ -59,7 +59,7 @@ The goal with this output file is that can be loaded into a spreadsheet program 
 Example command-line:
 
  ```
---InputFilePath "NewKidInSchool\timeline.json" --OutputFilePath "NewKidInSchool\table.csv"
+TableWriter.exe --InputFilePath "NewKidInSchool\timeline.json" --OutputFilePath "NewKidInSchool\table.csv"
 ```
 
 ## Playable Chart
@@ -70,16 +70,16 @@ This file is playable with the game as-is, but some adjustment to the SyncTrack 
 Example command-line:
 
 ```
---InputFilePath "NewKidInSchool\table_fixed.csv" --OutputFilePath "NewKidInSchool\song.kchart"
+KataWriter.exe --InputFilePath "NewKidInSchool\table_fixed.csv" --OutputFilePath "NewKidInSchool\song.kchart"
 ```
 
 ## Audio Extraction
-Run AudioExtractor to pull out the audio track out of the video file.  The audio wil lbe saved to the output file in MP3 format.
+Run AudioExtractor.exe to pull out the audio track out of the video file.  The audio wil lbe saved to the output file in MP3 format.
 
 Example command-line:
 
 ```
---InputFilePath "NewKidInSchool\newkidinschool.mp4" --OutputFilePath "NewKidInSchool\newkidinschool.mp3"
+AudioExtractor.exe --InputFilePath "NewKidInSchool\newkidinschool.mp4" --OutputFilePath "NewKidInSchool\newkidinschool.mp3"
 ```
 
 Note that the audio in the captured practice session will not contain the drum track.  If you want audio that includes a drum track while playing, you will need to find another recording of the song, possibly on youtube.
