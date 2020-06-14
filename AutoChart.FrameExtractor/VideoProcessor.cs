@@ -19,7 +19,9 @@ namespace AutoChart.FrameExtractor
         {
             string inputFilePath = options.InputFilePath;
             string outputDirectoryPath = options.OutputDirectoryPath;
-            double frameIntervalInSeconds = Convert.ToDouble(options.FrameIntervalInSeconds);
+            double frameIntervalInSeconds = options.FrameIntervalInSeconds;
+            double skipDurationInSeconds = options.SkipDurationInSeconds;
+            double takeDurationInSeconds = options.TakeDurationInSeconds;
 
             if (!Directory.Exists(outputDirectoryPath))
             {
@@ -33,17 +35,33 @@ namespace AutoChart.FrameExtractor
                 engine.GetMetadata(inputMediaFile);
 
                 double totalDurationInSeconds = inputMediaFile.Metadata.Duration.TotalSeconds;
-                int totalFrameCount = (int)(totalDurationInSeconds / frameIntervalInSeconds);
+                if (skipDurationInSeconds > totalDurationInSeconds)
+                {
+                    throw new Exception($"Skip duration ({skipDurationInSeconds}) exceeds total duration ({totalDurationInSeconds})");
+                }
 
-                Logger.Info($"Extracting {totalFrameCount} individual frames");
+                if (takeDurationInSeconds == default)
+                {
+                    takeDurationInSeconds = totalDurationInSeconds - skipDurationInSeconds;
+                }
+
+                double maxDurationInSeconds = takeDurationInSeconds + skipDurationInSeconds;
+                if (maxDurationInSeconds > totalDurationInSeconds)
+                {
+                    throw new Exception($"Skip and take duration total ({maxDurationInSeconds}) exceeds total duration ({totalDurationInSeconds})");
+                }
+
+                int takeFrameCount = (int)(takeDurationInSeconds / frameIntervalInSeconds);
+
+                Logger.Info($"Extracting {takeFrameCount} individual frames");
 
                 int frameIndex = 0;
-                double i = 0;
-                while (i < inputMediaFile.Metadata.Duration.TotalSeconds)
+                double i = skipDurationInSeconds;
+                while (i < maxDurationInSeconds)
                 {
                     long sequenceId = (long)(i * 1000);
                     string outputFilePath = Path.Combine(outputDirectoryPath, $"frame-{sequenceId:0000000}.jpg");
-                    Logger.Info($"{frameIndex++}/{totalFrameCount}: {outputFilePath}");
+                    Logger.Info($"{frameIndex++}/{takeFrameCount}: {outputFilePath}");
 
                     MediaFile outputMediaFile = new MediaFile { Filename = outputFilePath };
                     ConversionOptions conversionOptions = new ConversionOptions { Seek = TimeSpan.FromSeconds(i) };

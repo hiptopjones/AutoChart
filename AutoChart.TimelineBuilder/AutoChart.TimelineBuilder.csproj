@@ -7,7 +7,7 @@
     <ProjectGuid>{1A0B726E-A6B2-403D-973A-7D5C3D2F396C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>AutoChart.TimelineBuilder</RootNamespace>
-    <AssemblyName>AutoChart.TimelineBuilder</AssemblyName>
+    <AssemblyName>TimelineBuilder</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

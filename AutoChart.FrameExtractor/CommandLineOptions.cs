@@ -11,7 +11,9 @@ namespace AutoChart.FrameExtractor
         public string InputFilePath { get; private set; }
         public string OutputDirectoryPath { get; private set; }
         public double FrameIntervalInSeconds { get; set; } = 0;
-        
+        public double SkipDurationInSeconds { get; set; } = 0;
+        public double TakeDurationInSeconds { get; set; } = 0;
+
         public bool ParseArguments(string[] args)
         {
             try
@@ -30,6 +32,14 @@ namespace AutoChart.FrameExtractor
 
                         case "--FrameIntervalInSeconds":
                             FrameIntervalInSeconds = Convert.ToDouble(args[++i]);
+                            break;
+
+                        case "--SkipDurationInSeconds":
+                            SkipDurationInSeconds = Convert.ToDouble(args[++i]);
+                            break;
+
+                        case "--TakeDurationInSeconds":
+                            TakeDurationInSeconds = Convert.ToDouble(args[++i]);
                             break;
 
                         case "--PromptUser":
@@ -64,6 +74,8 @@ namespace AutoChart.FrameExtractor
                 Logger.Info($"  InputFilePath:                  '{InputFilePath}'");
                 Logger.Info($"  OutputDirectoryPath:            '{OutputDirectoryPath}'");
                 Logger.Info($"  FrameIntervalInSeconds:         {FrameIntervalInSeconds}");
+                Logger.Info($"  SkipDurationInSeconds:          {SkipDurationInSeconds}");
+                Logger.Info($"  TakeDurationInSeconds:          {TakeDurationInSeconds}");
                 Logger.Info($"  PromptUser:                     {PromptUser}");
             }
             catch (Exception ex)

@@ -75,10 +75,13 @@ namespace AutoChart.TableWriter
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
                 csv.WriteField("Index");
+
                 foreach (string tableColumnName in TableColumnNames)
                 {
                     csv.WriteField(tableColumnName);
                 }
+
+                csv.WriteField("SectionName");
 
                 csv.NextRecord();
 
@@ -86,10 +89,14 @@ namespace AutoChart.TableWriter
                 foreach (Dictionary<string, bool> tableEntry in songTable)
                 {
                     csv.WriteField(entryIndex.ToString());
+
                     foreach (string tableColumnName in TableColumnNames)
                     {
                         csv.WriteField(tableEntry.ContainsKey(tableColumnName) ? "X" : string.Empty);
                     }
+
+                    // The chart author can fill in this column before running the next step
+                    csv.WriteField(string.Empty);
 
                     csv.NextRecord();
                     entryIndex++;

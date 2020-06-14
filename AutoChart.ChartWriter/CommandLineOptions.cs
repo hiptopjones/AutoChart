@@ -10,6 +10,7 @@ namespace AutoChart.ChartWriter
         public bool PromptUser { get; private set; }
         public string InputFilePath { get; private set; }
         public string OutputFilePath { get; private set; }
+        public string SongFilePath { get; private set; }
 
         public bool ParseArguments(string[] args)
         {
@@ -25,6 +26,10 @@ namespace AutoChart.ChartWriter
 
                         case "--OutputFilePath":
                             OutputFilePath = args[++i];
+                            break;
+
+                        case "--SongFilePath":
+                            SongFilePath = args[++i];
                             break;
 
                         case "--PromptUser":
@@ -50,6 +55,7 @@ namespace AutoChart.ChartWriter
                 Logger.Info($"Application configuration:");
                 Logger.Info($"  InputFilePath:                  '{InputFilePath}'");
                 Logger.Info($"  OutputFilePath:                 '{OutputFilePath}'");
+                Logger.Info($"  SongFilePath:                   '{SongFilePath}'");
                 Logger.Info($"  PromptUser:                     {PromptUser}");
             }
             catch (Exception ex)

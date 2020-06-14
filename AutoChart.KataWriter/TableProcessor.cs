@@ -22,11 +22,11 @@ namespace AutoChart.KataWriter
 
             Logger.Info($"Processing '{inputFilePath}'");
 
-            List<dynamic> timelineEntries;
+            List<dynamic> timelineRecords;
             using (StreamReader reader = new StreamReader(inputFilePath))
             using (CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                timelineEntries = csv.GetRecords<dynamic>().ToList();
+                timelineRecords = csv.GetRecords<dynamic>().ToList();
             }
 
             // TODO: These should be command-line parameters
@@ -54,21 +54,25 @@ namespace AutoChart.KataWriter
 
             int timelineDivisionIndex = 0;
 
-            foreach (dynamic timelineEntry in timelineEntries)
+            foreach (dynamic timelineRecord in timelineRecords)
             {
+                IDictionary<string, object> timelineEntry = timelineRecord as IDictionary<string, object>;
+
                 int chartDivisionIndex = (int)(chartStartingDivisionIndex + (timelineDivisionIndex / (double)timelineDivisionsPerBeat) * chartDivisionsPerBeat);
 
                 foreach (string columnName in Enum.GetNames(typeof(DrumType)))
                 {
-                    object timelineEntryValue;
-                    if ((timelineEntry as IDictionary<string, object>).TryGetValue(columnName, out timelineEntryValue))
+                    if ((string)timelineEntry[columnName] == "X")
                     {
-                        if ((string)timelineEntryValue == "X")
-                        {
-                            int midiNoteIndex = GetMidiNoteFromColumnName(columnName);
-                            chart.ExpertDrums.Add(new KeyValuePair<string, string>(Convert.ToString(chartDivisionIndex), $"N {midiNoteIndex} 0"));
-                        }
+                        int midiNoteIndex = GetMidiNoteFromColumnName(columnName);
+                        chart.ExpertDrums.Add(new KeyValuePair<string, string>(Convert.ToString(chartDivisionIndex), $"N {midiNoteIndex} 0"));
                     }
+                }
+
+                string sectionName = (string)timelineEntry["SectionName"];
+                if (!string.IsNullOrEmpty(sectionName))
+                {
+                    chart.Events.Add(new KeyValuePair<string, string>(Convert.ToString(chartDivisionIndex), $"E \"section {sectionName}\""));
                 }
 
                 timelineDivisionIndex++;

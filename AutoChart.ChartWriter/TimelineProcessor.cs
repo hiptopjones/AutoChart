@@ -32,6 +32,7 @@ namespace AutoChart.ChartWriter
         {
             string inputFilePath = options.InputFilePath;
             string outputFilePath = options.OutputFilePath;
+            string songFilePath = options.SongFilePath;
 
             Logger.Info($"Processing '{inputFilePath}'");
 
@@ -54,7 +55,7 @@ namespace AutoChart.ChartWriter
             chart.Song.Add(new KeyValuePair<string, string>("PreviewEnd", "0"));
             chart.Song.Add(new KeyValuePair<string, string>("Genre", Quote("rock")));
             chart.Song.Add(new KeyValuePair<string, string>("MediaType", Quote("cd")));
-            chart.Song.Add(new KeyValuePair<string, string>("MusicStream", Quote("newkidinschool.mp3")));
+            chart.Song.Add(new KeyValuePair<string, string>("MusicStream", Quote(songFilePath)));
 
             chart.SyncTrack.Add(new KeyValuePair<string, string>("0", "TS 4"));
             chart.SyncTrack.Add(new KeyValuePair<string, string>("0", $"B {beatsPerMinute * 1000}"));
