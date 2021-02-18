@@ -26,7 +26,13 @@ namespace AutoChart.ImageCorrector
                 Directory.CreateDirectory(outputDirectoryPath);
             }
 
+            Logger.Info($"Processing '{inputDirectoryPath}'");
             string[] inputFilePaths = Directory.GetFiles(inputDirectoryPath);
+
+            int inputFileCount = inputFilePaths.Length;
+            Logger.Info($"Correcting {inputFileCount} images");
+
+            int imageIndex = 0;
             foreach (string inputFilePath in inputFilePaths)
             {
                 // Allow subsetting the input frames
@@ -45,13 +51,13 @@ namespace AutoChart.ImageCorrector
                     break;
                 }
 
-                Logger.Info($"Processing '{inputFilePath}'");
-
                 string inputFileName = Path.GetFileName(inputFilePath);
                 string inputFileExtension = Path.GetExtension(inputFileName);
 
                 string outputFileName = inputFileName.Substring(0, inputFileName.IndexOf('.')) + ".corrected" + inputFileExtension;
                 string outputFilePath = Path.Combine(outputDirectoryPath, outputFileName);
+
+                Logger.Info($"{imageIndex++}/{inputFileCount}: {outputFilePath}");
 
                 using (MagickImage image = new MagickImage(inputFilePath))
                 {

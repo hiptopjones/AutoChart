@@ -22,6 +22,8 @@ namespace AutoChart.KataWriter
 
             Logger.Info($"Processing '{inputFilePath}'");
 
+            List<string> badRecord = new List<string>();
+
             List<dynamic> timelineRecords;
             using (StreamReader reader = new StreamReader(inputFilePath))
             using (CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -34,7 +36,7 @@ namespace AutoChart.KataWriter
             int timelineDivisionsPerBeat = 4;
             int chartDivisionsPerBeat = 192;
             int chartStartingDivisionIndex = 768;
-            string songName = "newkidinschool.mp3";
+            string songName = "song.mp3";
 
             ChartFormat chart = new ChartFormat();
 

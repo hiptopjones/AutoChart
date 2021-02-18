@@ -53,7 +53,7 @@ namespace AutoChart.FrameExtractor
 
                 int takeFrameCount = (int)(takeDurationInSeconds / frameIntervalInSeconds);
 
-                Logger.Info($"Extracting {takeFrameCount} individual frames");
+                Logger.Info($"Extracting {takeFrameCount} frames");
 
                 int frameIndex = 0;
                 double i = skipDurationInSeconds;

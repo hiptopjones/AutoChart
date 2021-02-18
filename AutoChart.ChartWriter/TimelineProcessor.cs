@@ -39,6 +39,7 @@ namespace AutoChart.ChartWriter
             string jsonTimeline = File.ReadAllText(inputFilePath);
             List<Dictionary<string, bool>> songTimeline = JsonConvert.DeserializeObject<List<Dictionary<string, bool>>>(jsonTimeline);
 
+            // TODO: These should be command-line parameters
             int beatsPerMinute = 139;
             int timelineDivisionsPerBeat = 4;
             int chartDivisionsPerBeat = 192;
