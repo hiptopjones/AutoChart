@@ -1,9 +1,7 @@
 # AutoChart Toolchain
-Automatic charting of Rock Band songs for use in [RhythmKata](https://github.com/hiptopjones/RhythmKata).
+Automatic charting of Rock Band songs for use in other rhythm games.
 
 Going from video to playable song involves the following pipeline.
-
-> NOTE: Use at your own risk, as it is unlikely that any of these directions are allowed by software EULAs or music copyright.
 
 ## Video Capture
 Using a capture card (e.g. Elgato HD60 S), record a Rock Band 2 practice session of the full song at 100% speed.
